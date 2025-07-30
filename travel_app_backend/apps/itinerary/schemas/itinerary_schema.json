@@ -1,0 +1,24 @@
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/itineraryAlternative"
+  },
+  "definitions": {
+    "itineraryAlternative": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "location": { "type": "string" },
+        "arrival": { "type": "string", "format": "date" },
+        "departure": { "type": "string", "format": "date" },
+        "activities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["title", "description", "location", "arrival", "departure"],
+      "additionalProperties": false
+    }
+  }
+}

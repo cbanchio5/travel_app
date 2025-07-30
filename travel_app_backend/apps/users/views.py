@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-
 from rest_framework.response import Response
+from rest_framework import generics
+from .serializers import UserCreateSerializer
 
 # Create your views here.
 def index(request):
@@ -20,3 +21,8 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': token.user_id,
             'email': token.user.email,
         })
+
+
+
+class UserCreateView(generics.CreateAPIView):
+    serializer_class = UserCreateSerializer

@@ -18,10 +18,15 @@ from django.contrib import admin
 from django.urls import path
 from apps.users import views
 from apps.users.views import CustomAuthToken
+from apps.users.views import UserCreateView
+from apps.itinerary.views import test_itinerary_generator
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', views.index ),
-     path('login/', CustomAuthToken.as_view(), name='login'),
+    path('login/', CustomAuthToken.as_view(), name='login'),
+    path('register/', UserCreateView.as_view(), name='user-register'),
+    path('test-generator/', test_itinerary_generator, name='test_itinerary_generator'),
+
 ]
