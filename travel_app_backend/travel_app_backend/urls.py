@@ -17,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from apps.users import views
+from apps.users.views import CustomAuthToken
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', views.index )
+    path('users/', views.index ),
+     path('login/', CustomAuthToken.as_view(), name='login'),
 ]
