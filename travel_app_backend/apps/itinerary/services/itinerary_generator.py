@@ -2,24 +2,11 @@ import os
 import json
 from openai import OpenAI
 from dotenv import load_dotenv
-from pydantic import BaseModel
-from typing import List
-from datetime import date
+from apps.itinerary.models.itinerary_schema import ItineraryAlternative
 
-
-print(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 env_path = os.path.join(os.path.dirname(__file__), '../../../travel_app_backend/.env')
 load_dotenv(os.path.abspath(env_path))
 
-
-
-class ItineraryAlternative(BaseModel):
-    title: str
-    description: str
-    location: str
-    arrival: date
-    departure: date
-    activities: List[str] = []
 
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -31,7 +18,7 @@ def generate_itinerary_options(destination, arrival, departure):
     response = client.responses.parse(
         model="gpt-4o-mini",
         input=[
-            {"role": "system", "content": "You are a helpful travel assistant. Create 3 alternative itineraries for the destination."},
+            {"role": "system", "content": "You are a helpful travel assistant. Create 3 alternative itineraries for the destination. They should all include what to do and see on each day. Structure should be a dictionary of alternatives, each alternative being a dictionary of their own containing what to do on each day"},
         {
             "role": "user",
             "content": prompt_text,
@@ -40,7 +27,8 @@ def generate_itinerary_options(destination, arrival, departure):
         text_format=ItineraryAlternative,
     )
 
-    print(response)
+    print(response.output[0].content[0].parsed)
+    print(type(response))
 
     # Assuming response is JSON string:
     
