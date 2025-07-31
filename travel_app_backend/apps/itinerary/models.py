@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 
 # Create your models here.
-# apps/itinerary/models.py
 
 class Itinerary(models.Model):
     user = models.ForeignKey(
