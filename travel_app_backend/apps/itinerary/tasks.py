@@ -23,9 +23,9 @@ def generate_itinerary_task(destination, arrival_str, departure_str):
     departure = date.fromisoformat(departure_str)
     logger.info(f"Real client: {real_client}")
 
-    openai_client = OpenAIClientWrapper(client=real_client)  # Inject your real client here
+    openai_client = OpenAIClientWrapper(client=real_client)  
     generator = ItineraryGenerator(client=openai_client)
     itinerary = generator.generate(destination, arrival, departure)
 
-    # You might want to save to DB here instead of returning
+   
     return itinerary.dict()
