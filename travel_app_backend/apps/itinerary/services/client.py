@@ -4,6 +4,7 @@ class OpenAIClientWrapper:
         self.client = client
 
     def get_structured_response(self, system: str, user: str, model: str, schema_model):
+        print("Using wrapped client to get structured response")
         response = self.client.responses.parse(
             model=model,
             input=[

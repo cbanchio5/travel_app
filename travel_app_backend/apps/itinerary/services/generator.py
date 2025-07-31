@@ -34,7 +34,7 @@ class ItineraryGenerator:
                 system=system_prompt,
                 user=user_prompt,
                 model=self.model,
-                text_format=ItineraryAlternative
+                schema_model=ItineraryAlternative
             )
 
             logger.info(f"Successfully generated itinerary for {destination}")

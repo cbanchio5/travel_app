@@ -1,14 +1,13 @@
-# yourproject/celery.py
-
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourproject.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'travel_app_backend.settings')
 
-app = Celery('yourproject')
+app = Celery('travel_app')
 
-# Read celery config from Django settings, e.g. CELERY_BROKER_URL
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Autodiscover tasks from all installed apps
+app.conf.broker_url = 'redis://localhost:6379/0'
+app.conf.result_backend = 'redis://localhost:6379/0'
+
 app.autodiscover_tasks()
