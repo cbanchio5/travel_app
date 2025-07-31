@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'apps.flights',
     'apps.users',
     'apps.itinerary',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders'
 
 ]
 
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'travel_app_backend.urls'
@@ -66,6 +68,10 @@ REST_FRAMEWORK = {
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Adjust if you use different host/port
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Your React app
+]
 
 
 TEMPLATES = [
