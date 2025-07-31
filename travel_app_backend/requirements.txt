@@ -21,3 +21,6 @@ sqlparse==0.5.3
 tqdm==4.67.1
 typing-inspection==0.4.1
 typing_extensions==4.14.1
+asgiref==3.9.1
+Django==5.2.4
+sqlparse==0.5.3

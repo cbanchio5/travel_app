@@ -1,26 +1,39 @@
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from celery.result import AsyncResult
 from rest_framework import status
+from apps.itinerary.services.itinerary_generator import generate_itinerary_options 
+from apps.itinerary.services.client import OpenAIClientWrapper
+from apps.itinerary.services.generator import ItineraryGenerator
+from .tasks import generate_itinerary_task
 
-from apps.itinerary.services.itinerary_generator import generate_itinerary_options  # adjust import path
 
-@api_view(['POST'])
-def test_itinerary_generator(request):
-    # Expecting JSON input with destination, arrival, departure:
-    destination = request.data.get('destination')
-    arrival = request.data.get('arrival')
-    departure = request.data.get('departure')
+class TestItineraryGeneratorView(APIView):
+    def post(self, request):
+        destination = request.data.get('destination')
+        arrival = request.data.get('arrival')
+        departure = request.data.get('departure')
 
-    if not all([destination, arrival, departure]):
-        return Response({"error": "Please provide destination, arrival, and departure."},
-                        status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        # Call your itinerary generator service
-        itineraries = generate_itinerary_options(destination, arrival, departure)
+        if not destination or not arrival or not departure:
+            return Response({"error": "Missing parameters"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Launch the Celery task asynchronously
+            task = generate_itinerary_task.delay(destination, arrival, departure)
+            return Response({"task_id": task.id}, status=status.HTTP_202_ACCEPTED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        # Return the generated itineraries directly in the response
-        return Response(itineraries, status=status.HTTP_200_OK)
-    
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ItineraryTaskStatusView(APIView):
+    def get(self, request, task_id):
+        task_result = AsyncResult(task_id)
+        if task_result.state == 'PENDING':
+            return Response({"status": "Pending"}, status=status.HTTP_202_ACCEPTED)
+        elif task_result.state == 'SUCCESS':
+            return Response({"status": "Success", "result": task_result.result}, status=status.HTTP_200_OK)
+        elif task_result.state == 'FAILURE':
+            return Response({"status": "Failure", "error": str(task_result.result)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({"status": task_result.state}, status=status.HTTP_200_OK)

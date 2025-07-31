@@ -6,9 +6,11 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(true);
 
   return (
+    
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-tr from-blue-100 via-white to-blue-100 p-6">
+      <div className="bg-red-500 text-white p-4">Test Tailwind</div>
       <h1 className="text-4xl font-extrabold mb-8 text-blue-900 drop-shadow-lg">
-        Trippy
+        Trippy ok
       </h1>
       
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
