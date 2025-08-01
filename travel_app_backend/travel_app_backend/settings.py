@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-bx#j@qhd8x+uj&r^9a386i30zunbwx1s8qc2bosczvz=^vjvqo
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+REDIS_URL = os.environ.get('REDIS_URL_PROD', 'redis://localhost:6379')
 
 
 ALLOWED_HOSTS = [
