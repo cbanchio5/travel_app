@@ -27,5 +27,8 @@ COPY . .
 # Expose the default port
 EXPOSE 8000
 
+ENV PYTHONPATH="/app"
+
+
 # Run the Django app with Gunicorn
 CMD ["gunicorn", "travel_app_backend.wsgi:application", "--bind", "0.0.0.0:8000"]
