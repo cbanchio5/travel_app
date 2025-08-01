@@ -72,7 +72,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-CELERY_BROKER_URL = 'redis://redis:6379/0'  # Adjust if you use different host/port
+CELERY_BROKER_URL = REDIS_URL  # Adjust if you use different host/port
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
