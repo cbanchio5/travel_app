@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import socket
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +26,17 @@ SECRET_KEY = 'django-insecure-bx#j@qhd8x+uj&r^9a386i30zunbwx1s8qc2bosczvz=^vjvqo
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+
+
+REDIS_URL = os.environ.get('REDIS_URL')
 print("Connecting to Redis URL:", REDIS_URL)
+
+try:
+    hostname = REDIS_URL.split("//")[1].split(":")[0]
+    print("Trying to resolve Redis hostname:", hostname)
+    print("Resolved IP:", socket.gethostbyname(hostname))
+except Exception as e:
+    print("Hostname resolution error:", e)
 
 
 
