@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 import socket
+import redis
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +39,9 @@ try:
 except Exception as e:
     print("Hostname resolution error:", e)
 
+r = redis.from_url(os.environ['REDIS_URL'])
+r.set('key', 'redis-py')
+print(r.get('key').decode())
 
 
 ALLOWED_HOSTS = [
